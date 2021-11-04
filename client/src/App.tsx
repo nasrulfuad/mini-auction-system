@@ -1,51 +1,26 @@
-import { useQuery, useSubscription } from "@apollo/client";
-import { Col, Image, Layout, Row, Spin, Typography } from "antd";
+import { Col, Layout, Row, Typography } from "antd";
+import { Routes, Route } from "react-router-dom";
 import "./App.css";
-import { Counter } from "./components/Counter";
-import { Leaderboard } from "./components/Leaderboard";
-import { totalDonationQuery } from "./graphql/queries";
-import { totalUpdatedSubscription } from "./graphql/subscriptions";
+import { Auction } from "./pages/Auction";
+import { Home } from "./pages/Home";
 
 const { Title } = Typography;
 
 function App() {
-  const { loading, error, data } = useQuery(totalDonationQuery);
-
-  const { data: totalUpdatedSubscriptionResponse } = useSubscription(
-    totalUpdatedSubscription
-  );
-
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Row justify="center">
-        <Col span={24} style={{ textAlign: "center" }}>
-          <Image
-            src="https://assets01.teamassets.net/assets/images/teamseas-tm-logo.png"
-            preview={false}
-          />
-          <br />
-
-          <Title level={1}>JOIN THE MOVEMENT!</Title>
-
-          <Title level={2}>
-            Help us remove 30 million pounds of trash by January 1st, 2022.
+        <Col
+          span={24}
+          style={{ padding: "0 50px", margin: "auto", paddingTop: "5rem" }}
+        >
+          <Title level={1} style={{ textAlign: "center" }}>
+            Simple Acution System
           </Title>
-
-          <Title>
-            {loading ? (
-              <Spin />
-            ) : (
-              <Counter
-                from={0}
-                to={
-                  totalUpdatedSubscriptionResponse?.totalUpdated?.total ||
-                  data.totalDonations
-                }
-              />
-            )}
-          </Title>
-
-          <Leaderboard />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/auction/:id" element={<Auction />} />
+          </Routes>
         </Col>
       </Row>
     </Layout>

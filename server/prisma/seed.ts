@@ -20,10 +20,14 @@ async function main() {
     await prisma.auction.create({
       data: {
         name: `Item ${i}`,
-        price: 10,
+        price: Math.floor(Math.random() * 10) + 0,
         priceBIN: Math.floor(Math.random() * 200) + 50,
         auctionStart: today,
-        auctionEnd: new Date(today.setHours(today.getHours() + 1)),
+        auctionEnd: new Date(
+          today.setMinutes(
+            today.getMinutes() + Math.floor(Math.random() * 59) + 30,
+          ),
+        ),
       },
     });
   }

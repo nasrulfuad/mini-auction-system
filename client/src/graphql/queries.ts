@@ -1,5 +1,37 @@
 import { gql } from "@apollo/client";
 
+export const auctionsQuery = gql`
+  query Query {
+    auctions {
+      id
+      name
+      price
+      priceBIN
+      auctionStart
+      auctionEnd
+    }
+  }
+`;
+
+export const auctionQuery = gql`
+  query Auction($id: ID!) {
+    auction(id: $id) {
+      id
+      name
+      price
+      priceBIN
+      auctionStart
+      auctionEnd
+      bids {
+        id
+        name
+        price
+        createdAt
+      }
+    }
+  }
+`;
+
 export const totalDonationQuery = gql`
   query Query {
     totalDonations

@@ -16,9 +16,9 @@ export class BidService {
   ) {}
 
   async create(data: CreateBidInput) {
-    await this.auctionService.findOne(data.auctionId);
+    const auction = await this.auctionService.findOne(data.auctionId);
 
-    const highestPrice = (
+    let highestPrice = (
       await this.db.bid.aggregate({
         where: {
           auctionId: data.auctionId,
@@ -29,12 +29,14 @@ export class BidService {
       })
     )._max.price;
 
-    if (highestPrice) {
-      if (data.price <= +highestPrice) {
-        throw new BadRequestException(
-          'Price must be higher than latest bid price',
-        );
-      }
+    if (!highestPrice) {
+      highestPrice = auction.price;
+    }
+
+    if (data.price <= +highestPrice) {
+      throw new BadRequestException(
+        `Price must be higher than current price (${highestPrice})`,
+      );
     }
 
     const bidCreated = await this.db.bid.create({
