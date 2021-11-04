@@ -10,9 +10,6 @@ type Auction {
   """Auction start of an auction"""
   auctionStart: DateTime!
 
-  """List of bids"""
-  bids: [Bid!]
-
   """ID of an auction"""
   id: ID!
 
@@ -40,6 +37,14 @@ type Bid {
   price: Int!
 }
 
+type BidsResult {
+  """Cursor id"""
+  cursor: ID
+
+  """List of bids"""
+  items: [Bid!]!
+}
+
 input CreateAuctionInput {
   """Example field (placeholder)"""
   exampleField: Int!
@@ -65,15 +70,27 @@ type Mutation {
   createAuction(createAuctionInput: CreateAuctionInput!): Auction!
   createBid(createBidInput: CreateBidInput!): Bid!
   removeAuction(id: Int!): Auction!
-  removeBid(id: Int!): Bid!
   updateAuction(updateAuctionInput: UpdateAuctionInput!): Auction!
-  updateBid(updateBidInput: UpdateBidInput!): Bid!
 }
 
 type Query {
   auction(id: ID!): Auction!
   auctions: [Auction!]!
-  bid(id: ID!): Bid!
+  bids(queryBidsDto: QueryBidsDto!): BidsResult!
+}
+
+input QueryBidsDto {
+  """ID of an auction"""
+  auctionId: ID!
+
+  """Cursor"""
+  cursor: ID
+
+  """Direction"""
+  direction: String
+
+  """Field"""
+  field: String
 }
 
 type Subscription {
@@ -84,16 +101,4 @@ input UpdateAuctionInput {
   """Example field (placeholder)"""
   exampleField: Int
   id: Int!
-}
-
-input UpdateBidInput {
-  """Auction id"""
-  auctionId: ID
-  id: Int!
-
-  """Name of a bidder"""
-  name: String
-
-  """Price of bidder offer"""
-  price: Int
 }

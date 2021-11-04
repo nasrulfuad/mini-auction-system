@@ -17,13 +17,6 @@ export class AuctionService {
   async findOne(id: string) {
     const item = await this.db.auction.findUnique({
       where: { id },
-      include: {
-        bids: {
-          orderBy: {
-            createdAt: 'desc',
-          },
-        },
-      },
     });
 
     if (!item) throw new NotFoundException('Auction not found');

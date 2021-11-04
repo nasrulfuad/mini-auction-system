@@ -4,7 +4,7 @@ import { AuctionService } from 'src/auction/auction.service';
 import { PrismaService } from 'src/common/services/prisma.service';
 import { BID_CREATED_SUB } from './bid.types';
 import { CreateBidInput } from './dto/create-bid.input';
-import { UpdateBidInput } from './dto/update-bid.input';
+import { QueryBidsDto } from './dto/query-bids.dto';
 
 const pubSub = new PubSub();
 
@@ -51,24 +51,34 @@ export class BidService {
     return bidCreated;
   }
 
-  findAll(auctionId: string) {
-    return this.db.bid.findMany({
+  async findAll(queries: QueryBidsDto) {
+    const {
+      field = 'createdAt',
+      direction = 'desc',
+      cursor,
+      auctionId,
+    } = queries || {};
+
+    const options = {
+      skip: cursor ? 1 : 0,
+      take: 5,
+      cursor: cursor ? { id: cursor } : undefined,
+    };
+
+    const result = await this.db.bid.findMany({
       where: {
         auctionId,
       },
+      ...options,
+      orderBy: {
+        [field]: direction,
+      },
     });
-  }
 
-  findOne(id: string) {
-    return id;
-  }
-
-  update(id: number, updateBidInput: UpdateBidInput) {
-    return `This action updates a #${id} bid`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} bid`;
+    return {
+      items: result,
+      cursor: result.length > 0 ? result[result.length - 1].id : null,
+    };
   }
 
   bidCreatedHandler(subName: string) {

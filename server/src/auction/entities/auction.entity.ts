@@ -20,7 +20,4 @@ export class Auction {
 
   @Field(() => Date, { description: 'Auction end of an auction' })
   auctionEnd: Date;
-
-  @Field(() => [Bid], { description: 'List of bids', nullable: true })
-  bids: Bid[];
 }
