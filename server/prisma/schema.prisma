@@ -1,0 +1,39 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Donation {
+  id          String   @id @default(uuid())
+  count       Int
+  displayName String
+  email       String
+  mobile      String?
+  message     String?
+  team        String?
+  createdAt   DateTime @default(now())
+}
+
+model Auction {
+  id           String   @id @default(uuid())
+  name         String
+  price        Decimal
+  priceBIN     Decimal
+  auctionStart DateTime
+  auctionEnd   DateTime
+  bids         Bid[]
+}
+
+model Bid {
+  id        String   @id @default(uuid())
+  name      String
+  price     Decimal
+  createdAt DateTime @default(now())
+
+  auctionId String
+  auction   Auction @relation(fields: [auctionId], references: [id], onDelete: Cascade)
+}

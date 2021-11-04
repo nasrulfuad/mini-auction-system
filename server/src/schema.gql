@@ -1,0 +1,99 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+"""auction"""
+type Auction {
+  """Auction end of an auction"""
+  auctionEnd: DateTime!
+
+  """Auction start of an auction"""
+  auctionStart: DateTime!
+
+  """List of bids"""
+  bids: [Bid!]
+
+  """ID of an auction"""
+  id: ID!
+
+  """Name of an auction"""
+  name: String!
+
+  """Current price of an auction"""
+  price: Int!
+
+  """Price buy it now"""
+  priceBIN: Int!
+}
+
+type Bid {
+  """Bid created"""
+  createdAt: DateTime!
+
+  """ID of an bid"""
+  id: ID!
+
+  """Name of a bidder"""
+  name: String!
+
+  """Price of bidder offer"""
+  price: Int!
+}
+
+input CreateAuctionInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input CreateBidInput {
+  """Auction id"""
+  auctionId: ID!
+
+  """Name of a bidder"""
+  name: String!
+
+  """Price of bidder offer"""
+  price: Int!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Mutation {
+  createAuction(createAuctionInput: CreateAuctionInput!): Auction!
+  createBid(createBidInput: CreateBidInput!): Bid!
+  removeAuction(id: Int!): Auction!
+  removeBid(id: Int!): Bid!
+  updateAuction(updateAuctionInput: UpdateAuctionInput!): Auction!
+  updateBid(updateBidInput: UpdateBidInput!): Bid!
+}
+
+type Query {
+  auction(id: ID!): Auction!
+  auctions: [Auction!]!
+  bid(id: ID!): Bid!
+}
+
+type Subscription {
+  BID_CREATED: Bid!
+}
+
+input UpdateAuctionInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input UpdateBidInput {
+  """Auction id"""
+  auctionId: ID
+  id: Int!
+
+  """Name of a bidder"""
+  name: String
+
+  """Price of bidder offer"""
+  price: Int
+}

@@ -1,0 +1,51 @@
+scalar DateTime
+
+type Donation {
+  id: ID!
+  count: Int!
+  displayName: String!
+  email: String!
+  mobile: String
+  team: String
+  message: String
+  createdAt: DateTime
+}
+
+input CreateDonationInput {
+  count: Int!
+  displayName: String!
+  email: String!
+  mobile: String
+  team: String
+  message: String
+  createdAt: DateTime
+}
+
+input DonationQueries {
+  field: String
+  direction: String
+  cursor: ID
+}
+
+type Query {
+  donations(queries: DonationQueries): DonationQueryResult
+  donation(id: ID!): Donation
+  totalDonations: Int!
+}
+
+type Mutation {
+  createDonation(createDonationInput: CreateDonationInput!): Donation!
+}
+
+type DonationQueryResult {
+  items: [Donation]
+  cursor: ID
+}
+
+type SubscriptionTotalUpdatedResult {
+  total: Int!
+}
+
+type Subscription {
+  totalUpdated: SubscriptionTotalUpdatedResult
+}
