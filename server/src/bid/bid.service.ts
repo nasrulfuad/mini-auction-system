@@ -46,7 +46,7 @@ export class BidService {
       },
     });
 
-    pubSub.publish(BID_CREATED_SUB, { bidCreated });
+    pubSub.publish(BID_CREATED_SUB, { [BID_CREATED_SUB]: bidCreated });
 
     return bidCreated;
   }

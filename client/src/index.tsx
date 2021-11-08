@@ -8,9 +8,11 @@ import {
 import { WebSocketLink } from "@apollo/client/link/ws";
 import { getMainDefinition } from "@apollo/client/utilities";
 import { render } from "react-dom";
+import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import store from "./store";
 
 const BASE_URL = "localhost:3001";
 
@@ -43,9 +45,8 @@ const client = new ApolloClient({
     typePolicies: {
       Query: {
         fields: {
-          donations: {
+          bids: {
             keyArgs: false,
-            /** merge cursor pagination donations*/
             merge: (existing, incoming) => ({
               items: [...(existing?.items || []), ...(incoming?.items || [])],
               cursor: incoming.cursor || null,
@@ -59,9 +60,11 @@ const client = new ApolloClient({
 
 render(
   <ApolloProvider client={client}>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <Provider store={store}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </Provider>
   </ApolloProvider>,
   document.getElementById("root")
 );

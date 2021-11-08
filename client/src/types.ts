@@ -5,7 +5,6 @@ export interface IAuction {
   priceBIN: number;
   auctionStart: Date;
   auctionEnd: Date;
-  bids: IBid[];
 }
 
 export interface IBid {

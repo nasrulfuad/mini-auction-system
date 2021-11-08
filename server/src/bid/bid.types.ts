@@ -4,7 +4,7 @@ import { Bid } from './entities/bid.entity';
 export const BID_CREATED_SUB = 'BID_CREATED';
 
 @ObjectType()
-export class BidsResult {
+export class Bids {
   @Field(() => [Bid], { description: 'List of bids' })
   items: Bid[];
 

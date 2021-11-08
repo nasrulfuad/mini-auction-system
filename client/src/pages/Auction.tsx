@@ -1,8 +1,13 @@
 import { useQuery } from "@apollo/client";
 import { Button, Card, Descriptions, Result, Skeleton } from "antd";
 import Countdown from "antd/lib/statistic/Countdown";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router";
+import { Bid } from "../components/Bid";
+import { Bids } from "../components/Bids";
 import { auctionQuery } from "../graphql/queries";
+import { addAuction } from "../store/auction.reducer";
 import { IAuction } from "../types";
 import { toMoney } from "../utils/toMoney";
 
@@ -18,8 +23,19 @@ export const Auction: React.FC = () => {
   });
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const backHome = () => navigate("/");
+
+  useEffect(() => {
+    if (data?.auction) {
+      dispatch(addAuction(data.auction));
+    }
+  }, [data]);
+
+  if (loading) {
+    return <Skeleton active />;
+  }
 
   if (!data) {
     return (
@@ -52,50 +68,45 @@ export const Auction: React.FC = () => {
   }
 
   const {
-    auction: { name, price, priceBIN, auctionStart, auctionEnd, bids },
+    auction: { name, price, priceBIN, auctionStart, auctionEnd },
   } = data;
 
   return (
-    <Card>
-      {loading ? (
-        <Skeleton active />
-      ) : (
-        <Descriptions
-          title="Auction detail"
-          bordered
-          column={{ md: 2, sm: 1, xs: 1 }}
-        >
-          <Descriptions.Item label="Name">{name}</Descriptions.Item>
+    <Card
+      title={<h1>Auction detail </h1>}
+      extra={
+        <Button type="primary" onClick={() => navigate("/")}>
+          Home
+        </Button>
+      }
+    >
+      <Descriptions bordered column={{ md: 2, sm: 1, xs: 1 }}>
+        <Descriptions.Item label="Name">{name}</Descriptions.Item>
 
-          <Descriptions.Item label="Total Bids">
-            {bids?.length}
-          </Descriptions.Item>
+        <Descriptions.Item label="Start Price">
+          {toMoney(price)}
+        </Descriptions.Item>
 
-          <Descriptions.Item label="Start Price">
-            {toMoney(price)}
-          </Descriptions.Item>
+        <Descriptions.Item label="Buy Now">
+          {toMoney(priceBIN)}
+        </Descriptions.Item>
 
-          <Descriptions.Item label="Buy Now">
-            {toMoney(priceBIN)}
-          </Descriptions.Item>
+        <Descriptions.Item label="Start">
+          {new Date(auctionStart).toLocaleString()}
+        </Descriptions.Item>
 
-          <Descriptions.Item label="Start">
-            {new Date(auctionStart).toLocaleString()}
-          </Descriptions.Item>
+        <Descriptions.Item label="End">
+          {new Date(auctionEnd).toLocaleString()}
+        </Descriptions.Item>
 
-          <Descriptions.Item label="End">
-            {new Date(auctionEnd).toLocaleString()}
-          </Descriptions.Item>
+        <Descriptions.Item label="Timeleft">
+          <Countdown value={new Date(auctionEnd).getTime()} />
+        </Descriptions.Item>
+      </Descriptions>
 
-          <Descriptions.Item label="Current Price">
-            {toMoney(bids.length > 0 ? bids[0].price : price)}
-          </Descriptions.Item>
+      <Bid />
 
-          <Descriptions.Item label="Timeleft">
-            <Countdown value={new Date(auctionEnd).getTime()} />
-          </Descriptions.Item>
-        </Descriptions>
-      )}
+      {params.id && <Bids auctionId={params.id} />}
     </Card>
   );
 };

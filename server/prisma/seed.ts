@@ -6,18 +6,9 @@ async function main() {
   await prisma.auction.deleteMany({});
 
   for (let i = 10; i >= 1; i--) {
-    // await prisma.donation.create({
-    //   data: {
-    //     count: i,
-    //     email: `${i}@email.com`,
-    //     displayName: `User ${i}`,
-    //     team: `team-${i}`,
-    //     message:
-    //       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
-    //   },
-    // });
     const today = new Date();
-    await prisma.auction.create({
+
+    const auction = await prisma.auction.create({
       data: {
         name: `Item ${i}`,
         price: Math.floor(Math.random() * 10) + 0,
@@ -30,6 +21,18 @@ async function main() {
         ),
       },
     });
+
+    if (i === 10) {
+      for (let j = 1; j <= 25; j++) {
+        await prisma.bid.create({
+          data: {
+            auctionId: auction.id,
+            name: `Bidder ${j}`,
+            price: +auction.price + j,
+          },
+        });
+      }
+    }
   }
 }
 

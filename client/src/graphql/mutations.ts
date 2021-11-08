@@ -1,14 +1,12 @@
-export const createDonation = `
-  mutation Mutation($createDonationInput: CreateDonationInput!) {
-    createDonation(createDonationInput: $createDonationInput) {
+import gql from "graphql-tag";
+
+export const createBidMutation = gql`
+  mutation createBid($createBidInput: CreateBidInput!) {
+    createBid(createBidInput: $createBidInput) {
       id
-      count
-      displayName
+      name
+      price
       createdAt
-      message
-      email
-      mobile
-      team
     }
   }
 `;

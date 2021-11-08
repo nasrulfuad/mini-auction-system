@@ -1,6 +1,6 @@
 import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { BidService } from './bid.service';
-import { BID_CREATED_SUB, BidsResult } from './bid.types';
+import { BID_CREATED_SUB, Bids } from './bid.types';
 import { CreateBidInput } from './dto/create-bid.input';
 import { QueryBidsDto } from './dto/query-bids.dto';
 import { Bid } from './entities/bid.entity';
@@ -14,7 +14,7 @@ export class BidResolver {
     return this.bidService.create(dto);
   }
 
-  @Query(() => BidsResult, { name: 'bids' })
+  @Query(() => Bids, { name: 'bids' })
   findAll(
     @Args('queryBidsDto', { type: () => QueryBidsDto }) queries: QueryBidsDto,
   ) {
@@ -25,6 +25,10 @@ export class BidResolver {
     name: BID_CREATED_SUB,
   })
   bidCreatedHandler() {
-    return this.bidService.bidCreatedHandler(BID_CREATED_SUB);
+    const a = this.bidService.bidCreatedHandler(BID_CREATED_SUB);
+
+    console.log(a);
+
+    return a;
   }
 }

@@ -18,7 +18,7 @@ export const Auctions: React.FC = () => {
   return (
     <List
       grid={{
-        gutter: 20,
+        gutter: 50,
         xs: 1,
         sm: 1,
         md: 2,

@@ -1,9 +1,12 @@
 import { gql } from "@apollo/client";
 
-export const totalUpdatedSubscription = gql`
-  subscription Subscription {
-    totalUpdated {
-      total
+export const bidCreatedSubscription = gql`
+  subscription bidCreated {
+    BID_CREATED {
+      id
+      name
+      price
+      createdAt
     }
   }
 `;

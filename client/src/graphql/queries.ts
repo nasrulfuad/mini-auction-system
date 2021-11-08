@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
 export const auctionsQuery = gql`
-  query Query {
+  query Auctions {
     auctions {
       id
       name
@@ -22,12 +22,20 @@ export const auctionQuery = gql`
       priceBIN
       auctionStart
       auctionEnd
-      bids {
+    }
+  }
+`;
+
+export const bidsQuery = gql`
+  query Query($queries: QueryBidsDto!) {
+    bids(queryBidsDto: $queries) {
+      items {
         id
         name
         price
         createdAt
       }
+      cursor
     }
   }
 `;

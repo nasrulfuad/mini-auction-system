@@ -2,7 +2,7 @@ import { ObjectType, Field, Int, ID } from '@nestjs/graphql';
 
 @ObjectType()
 export class Bid {
-  @Field(() => ID, { description: 'ID of an bid' })
+  @Field(() => ID, { description: 'ID of a bid' })
   id: string;
 
   @Field(() => String, { description: 'Name of a bidder' })

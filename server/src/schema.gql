@@ -27,7 +27,7 @@ type Bid {
   """Bid created"""
   createdAt: DateTime!
 
-  """ID of an bid"""
+  """ID of a bid"""
   id: ID!
 
   """Name of a bidder"""
@@ -37,7 +37,7 @@ type Bid {
   price: Int!
 }
 
-type BidsResult {
+type Bids {
   """Cursor id"""
   cursor: ID
 
@@ -76,7 +76,7 @@ type Mutation {
 type Query {
   auction(id: ID!): Auction!
   auctions: [Auction!]!
-  bids(queryBidsDto: QueryBidsDto!): BidsResult!
+  bids(queryBidsDto: QueryBidsDto!): Bids!
 }
 
 input QueryBidsDto {

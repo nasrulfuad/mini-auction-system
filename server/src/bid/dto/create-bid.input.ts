@@ -16,6 +16,5 @@ export class CreateBidInput {
   @Field(() => Int, { description: 'Price of bidder offer' })
   @IsNotEmpty()
   @IsNumber()
-  @Min(2)
   price: number;
 }
