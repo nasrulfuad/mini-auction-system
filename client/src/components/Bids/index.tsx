@@ -1,11 +1,12 @@
-import { useQuery, useSubscription } from "@apollo/client";
-import { Alert, Card, Divider, List, Skeleton, Tag } from "antd";
+import { useApolloClient, useQuery, useSubscription } from "@apollo/client";
+import { Alert, Card, Divider, List, notification, Skeleton, Tag } from "antd";
 import { useEffect } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useDispatch, useSelector } from "react-redux";
 import { bidsQuery } from "../../graphql/queries";
 import { bidCreatedSubscription } from "../../graphql/subscriptions";
 import { addHighestPrice, getAuction } from "../../store/auction.reducer";
+import { getUser } from "../../store/user.reducer";
 import { IBid, IPaginateCursor } from "../../types";
 import { toMoney } from "../../utils/toMoney";
 import { BidItem } from "./BidItem";
@@ -24,15 +25,59 @@ export const Bids: React.FC<{ auctionId: string }> = ({ auctionId }) => {
     },
   });
 
+  const user = useSelector(getUser);
+
+  const client = useApolloClient();
+
   const auction = useSelector(getAuction);
 
   const dispatch = useDispatch();
 
-  const { data: bidCreated, loading: bidCreatedLoading } = useSubscription(
+  const { data: bidCreated } = useSubscription<{ BID_CREATED: IBid }>(
     bidCreatedSubscription
   );
 
-  console.log("bidCreated", bidCreated);
+  useEffect(() => {
+    if (bidCreated) {
+      const { BID_CREATED } = bidCreated;
+
+      client.writeQuery({
+        query: bidsQuery,
+        data: {
+          bids: {
+            write: true,
+            ...data?.bids,
+            items: [BID_CREATED],
+          },
+        },
+        variables: {
+          queries: {
+            auctionId,
+            field: "createdAt",
+            direction: "desc",
+            cursor: data?.bids.cursor,
+          },
+        },
+      });
+
+      dispatch(addHighestPrice(BID_CREATED.price));
+
+      const isBidOwner = user.name === BID_CREATED.name;
+
+      if (isBidOwner) {
+        notification.success({
+          message: "Congratulation",
+          description: "Your bid has been placed!",
+        });
+      } else {
+        notification.info({
+          message: "New Bid!",
+          description: `${BID_CREATED.name} has been placed new bid!`,
+        });
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [bidCreated]);
 
   const loadMoreData = async () => {
     const cursor = data?.bids.cursor;
@@ -51,12 +96,14 @@ export const Bids: React.FC<{ auctionId: string }> = ({ auctionId }) => {
 
   useEffect(() => {
     refetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    if (data?.bids && data.bids.items.length > 0) {
+    if (data?.bids && data.bids.items.length > 0 && !bidCreated) {
       dispatch(addHighestPrice(data.bids.items[0].price));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   return (
@@ -68,15 +115,7 @@ export const Bids: React.FC<{ auctionId: string }> = ({ auctionId }) => {
         padding: 0,
         marginTop: 30,
       }}
-      extra={
-        <Tag color="processing">
-          {toMoney(
-            data?.bids && data.bids.items.length > 0
-              ? data?.bids.items[0].price
-              : auction.highestPrice
-          )}
-        </Tag>
-      }
+      extra={<Tag color="processing">{toMoney(auction.highestPrice)}</Tag>}
     >
       <Card
         bordered={false}
@@ -108,7 +147,9 @@ export const Bids: React.FC<{ auctionId: string }> = ({ auctionId }) => {
             />
           ) : (
             <List
-              dataSource={data?.bids.items}
+              dataSource={[...(data?.bids.items || [])].sort(
+                (a, b) => b?.price - a?.price
+              )}
               renderItem={(item) => <BidItem item={item} />}
             />
           )}

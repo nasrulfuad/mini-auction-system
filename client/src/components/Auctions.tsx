@@ -11,7 +11,7 @@ interface auctionsQueryRes {
 }
 
 export const Auctions: React.FC = () => {
-  const { data, loading, error } = useQuery<auctionsQueryRes>(auctionsQuery);
+  const { data } = useQuery<auctionsQueryRes>(auctionsQuery);
 
   const navigate = useNavigate();
 

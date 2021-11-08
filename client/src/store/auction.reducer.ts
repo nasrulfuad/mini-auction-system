@@ -1,13 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { IAuction, IBid } from "../types";
+import { IAuction } from "../types";
 
 interface IAuctionState {
   item: IAuction | null;
   highestPrice: number;
-}
-
-interface IAddAuctionAction {
-  payload: IAuction;
 }
 
 export const Slice = createSlice<

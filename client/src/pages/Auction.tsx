@@ -1,18 +1,30 @@
 import { useQuery } from "@apollo/client";
-import { Button, Card, Descriptions, Result, Skeleton } from "antd";
+import {
+  Button,
+  Card,
+  Descriptions,
+  Input,
+  Modal,
+  Result,
+  Skeleton,
+} from "antd";
 import Countdown from "antd/lib/statistic/Countdown";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
 import { Bid } from "../components/Bid";
 import { Bids } from "../components/Bids";
 import { auctionQuery } from "../graphql/queries";
 import { addAuction } from "../store/auction.reducer";
+import { addUser, getUser } from "../store/user.reducer";
 import { IAuction } from "../types";
 import { toMoney } from "../utils/toMoney";
 
 export const Auction: React.FC = () => {
+  const [state, setState] = useState({ name: "" });
   const params = useParams<"id">();
+
+  const user = useSelector(getUser);
 
   const { data, loading, error } = useQuery<{
     auction: IAuction;
@@ -23,6 +35,7 @@ export const Auction: React.FC = () => {
   });
 
   const navigate = useNavigate();
+
   const dispatch = useDispatch();
 
   const backHome = () => navigate("/");
@@ -31,6 +44,7 @@ export const Auction: React.FC = () => {
     if (data?.auction) {
       dispatch(addAuction(data.auction));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   if (loading) {
@@ -72,41 +86,64 @@ export const Auction: React.FC = () => {
   } = data;
 
   return (
-    <Card
-      title={<h1>Auction detail </h1>}
-      extra={
-        <Button type="primary" onClick={() => navigate("/")}>
-          Home
-        </Button>
-      }
-    >
-      <Descriptions bordered column={{ md: 2, sm: 1, xs: 1 }}>
-        <Descriptions.Item label="Name">{name}</Descriptions.Item>
+    <>
+      <Modal
+        title="Authentication needed"
+        visible={!user.name}
+        onOk={() =>
+          dispatch(
+            addUser({
+              name: state.name,
+            })
+          )
+        }
+        closable={false}
+        cancelButtonProps={{
+          disabled: true,
+        }}
+      >
+        <Input
+          placeholder="Username..."
+          autoFocus
+          onChange={(e) => setState({ name: e.target.value })}
+        />
+      </Modal>
+      <Card
+        title={<h1>Auction detail </h1>}
+        extra={
+          <Button type="primary" onClick={() => navigate("/")}>
+            Home
+          </Button>
+        }
+      >
+        <Descriptions bordered column={{ md: 2, sm: 1, xs: 1 }}>
+          <Descriptions.Item label="Name">{name}</Descriptions.Item>
 
-        <Descriptions.Item label="Start Price">
-          {toMoney(price)}
-        </Descriptions.Item>
+          <Descriptions.Item label="Start Price">
+            {toMoney(price)}
+          </Descriptions.Item>
 
-        <Descriptions.Item label="Buy Now">
-          {toMoney(priceBIN)}
-        </Descriptions.Item>
+          <Descriptions.Item label="Buy Now">
+            {toMoney(priceBIN)}
+          </Descriptions.Item>
 
-        <Descriptions.Item label="Start">
-          {new Date(auctionStart).toLocaleString()}
-        </Descriptions.Item>
+          <Descriptions.Item label="Start">
+            {new Date(auctionStart).toLocaleString()}
+          </Descriptions.Item>
 
-        <Descriptions.Item label="End">
-          {new Date(auctionEnd).toLocaleString()}
-        </Descriptions.Item>
+          <Descriptions.Item label="End">
+            {new Date(auctionEnd).toLocaleString()}
+          </Descriptions.Item>
 
-        <Descriptions.Item label="Timeleft">
-          <Countdown value={new Date(auctionEnd).getTime()} />
-        </Descriptions.Item>
-      </Descriptions>
+          <Descriptions.Item label="Timeleft">
+            <Countdown value={new Date(auctionEnd).getTime()} />
+          </Descriptions.Item>
+        </Descriptions>
 
-      <Bid />
+        <Bid />
 
-      {params.id && <Bids auctionId={params.id} />}
-    </Card>
+        {params.id && <Bids auctionId={params.id} />}
+      </Card>
+    </>
   );
 };

@@ -25,10 +25,6 @@ export class BidResolver {
     name: BID_CREATED_SUB,
   })
   bidCreatedHandler() {
-    const a = this.bidService.bidCreatedHandler(BID_CREATED_SUB);
-
-    console.log(a);
-
-    return a;
+    return this.bidService.bidCreatedHandler(BID_CREATED_SUB);
   }
 }

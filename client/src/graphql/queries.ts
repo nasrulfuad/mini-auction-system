@@ -27,37 +27,13 @@ export const auctionQuery = gql`
 `;
 
 export const bidsQuery = gql`
-  query Query($queries: QueryBidsDto!) {
+  query bids($queries: QueryBidsDto!) {
     bids(queryBidsDto: $queries) {
       items {
         id
         name
         price
         createdAt
-      }
-      cursor
-    }
-  }
-`;
-
-export const totalDonationQuery = gql`
-  query Query {
-    totalDonations
-  }
-`;
-
-export const donationsQUery = gql`
-  query Query($queries: DonationQueries) {
-    donations(queries: $queries) {
-      items {
-        id
-        count
-        displayName
-        team
-        mobile
-        email
-        createdAt
-        message
       }
       cursor
     }

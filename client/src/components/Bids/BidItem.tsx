@@ -1,5 +1,5 @@
-import { Avatar, List, Space, Tag, Typography } from "antd";
-import { IBid, IDonation } from "../../types";
+import { Avatar, List, Tag, Typography } from "antd";
+import { IBid } from "../../types";
 import { toMoney } from "../../utils/toMoney";
 
 interface IBidItemProps {

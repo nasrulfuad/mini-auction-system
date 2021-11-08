@@ -47,10 +47,12 @@ const client = new ApolloClient({
         fields: {
           bids: {
             keyArgs: false,
-            merge: (existing, incoming) => ({
-              items: [...(existing?.items || []), ...(incoming?.items || [])],
-              cursor: incoming.cursor || null,
-            }),
+            merge: (existing, incoming) => {
+              return {
+                items: [...(existing?.items || []), ...(incoming?.items || [])],
+                cursor: incoming.cursor || null,
+              };
+            },
           },
         },
       },
