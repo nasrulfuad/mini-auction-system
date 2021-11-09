@@ -67,6 +67,7 @@ This project is built under these awesome libraries
 - [GraphQL](https://graphql.org/)
 - [AntDesign](https://ant.design/)
 - [ReactJS](https://reactjs.org/)
+- [PrismaORM](https://prisma.io/)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -147,6 +148,7 @@ Use this space to list resources you find helpful and would like to give credit 
 - [NestJS](https://nestjs.com)
 - [AntDesign](https://ant.design/)
 - [ReactJS](https://reactjs.org/)
+- [PrismaORM](https://prisma.io/)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
