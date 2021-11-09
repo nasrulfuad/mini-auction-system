@@ -132,7 +132,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 Nasrul - [@nasrulfuad88](https://instagram.com/nasrulfuad88) - [nasrulfuad@pm.me](mailto:nasrulfuad@pm.me)
 
-Project Link: [Simple Auction System](https://github.com/nasrulfuad/mini-auction-system)
+Project Link: [Mini Auction System](https://github.com/nasrulfuad/mini-auction-system)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
