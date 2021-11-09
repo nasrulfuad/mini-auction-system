@@ -1,8 +1,8 @@
 {
-  "name": "teamseas-server",
+  "name": "auction-system-server",
   "private": true,
   "version": "1.0.0",
-  "description": "Teamseas Clone Server",
+  "description": "Simple auction system",
   "license": "MIT",
   "prisma": {
     "seed": "ts-node prisma/seed.ts"

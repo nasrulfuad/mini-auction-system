@@ -22,6 +22,7 @@ import { toMoney } from "../utils/toMoney";
 
 export const Auction: React.FC = () => {
   const [state, setState] = useState({ name: "" });
+
   const params = useParams<"id">();
 
   const user = useSelector(getUser);

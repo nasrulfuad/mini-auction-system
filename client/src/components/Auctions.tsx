@@ -17,15 +17,7 @@ export const Auctions: React.FC = () => {
 
   return (
     <List
-      grid={{
-        gutter: 50,
-        xs: 1,
-        sm: 1,
-        md: 2,
-        lg: 2,
-        xl: 3,
-        xxl: 4,
-      }}
+      grid={listGrid}
       dataSource={data?.auctions}
       renderItem={(item) => {
         const isClosed = new Date(item.auctionEnd).getTime() < Date.now();
@@ -78,4 +70,14 @@ export const Auctions: React.FC = () => {
       }}
     />
   );
+};
+
+const listGrid = {
+  gutter: 50,
+  xs: 1,
+  sm: 1,
+  md: 2,
+  lg: 2,
+  xl: 3,
+  xxl: 4,
 };

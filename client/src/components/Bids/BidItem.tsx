@@ -13,13 +13,8 @@ export const BidItem: React.FC<IBidItemProps> = (props) => {
     <List.Item
       key={item.id}
       extra={
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
-          <Tag style={{ marginRight: 0, marginBottom: 10 }} color="success">
+        <div style={{ ...styles.container, flexDirection: "column" }}>
+          <Tag style={styles.price} color="success">
             <b>{toMoney(item.price)}</b>
           </Tag>
           <small>{new Date(item.createdAt).toLocaleString()}</small>
@@ -27,7 +22,6 @@ export const BidItem: React.FC<IBidItemProps> = (props) => {
       }
     >
       <List.Item.Meta
-        style={{ textAlign: "left" }}
         avatar={<Avatar src={`https://i.pravatar.cc/50?u=${item.name}`} />}
         title={
           <Typography.Text strong style={{ fontSize: 16 }}>
@@ -37,4 +31,11 @@ export const BidItem: React.FC<IBidItemProps> = (props) => {
       />
     </List.Item>
   );
+};
+
+const styles = {
+  container: {
+    display: "flex",
+  },
+  price: { marginRight: 0, marginBottom: 10 },
 };

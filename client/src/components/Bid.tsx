@@ -10,6 +10,7 @@ export const Bid: React.FC = () => {
   const [highestPrice, setHighestPrice] = useState(0);
 
   const auction = useSelector(getAuction);
+
   const user = useSelector(getUser);
 
   const [addPlace] = useMutation(createBidMutation);
@@ -38,7 +39,7 @@ export const Bid: React.FC = () => {
 
   return (
     <Card
-      style={{ width: 800, margin: "auto", marginTop: 30, textAlign: "center" }}
+      style={{ ...styles.container, textAlign: "center" }}
       title={<h4 style={{ textAlign: "left" }}>Place your bid</h4>}
     >
       <Space direction="vertical" style={{ width: "50%" }}>
@@ -74,4 +75,12 @@ export const Bid: React.FC = () => {
       </Space>
     </Card>
   );
+};
+
+const styles = {
+  container: {
+    width: "100%",
+    margin: "auto",
+    marginTop: 30,
+  },
 };

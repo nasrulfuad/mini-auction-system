@@ -109,24 +109,10 @@ export const Bids: React.FC<{ auctionId: string }> = ({ auctionId }) => {
   return (
     <Card
       title="Bids"
-      style={{
-        width: 800,
-        margin: "auto",
-        padding: 0,
-        marginTop: 30,
-      }}
+      style={styles.container}
       extra={<Tag color="processing">{toMoney(auction.highestPrice)}</Tag>}
     >
-      <Card
-        bordered={false}
-        id="scrollableDiv"
-        style={{
-          height: 280,
-          overflow: "auto",
-          padding: "0 40px",
-          margin: "auto",
-        }}
-      >
+      <Card bordered={false} id="scrollableDiv" style={styles.subContainer}>
         <InfiniteScroll
           dataLength={data?.bids.items.length || 0}
           next={loadMoreData}
@@ -157,4 +143,19 @@ export const Bids: React.FC<{ auctionId: string }> = ({ auctionId }) => {
       </Card>
     </Card>
   );
+};
+
+const styles = {
+  container: {
+    width: "100%",
+    margin: "auto",
+    padding: 0,
+    marginTop: 30,
+  },
+  subContainer: {
+    height: 280,
+    overflow: "auto",
+    padding: "0 40px",
+    margin: "auto",
+  },
 };
